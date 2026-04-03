@@ -314,6 +314,7 @@ class SoliscloudAPI(BaseAPI):
         self._is_online: bool = False
         self._data: dict[str, str | int | float] = {}
         self._inverter_list: dict[str, str] | None = None
+        self._plant_name: str | None = None
         self._token = ""
         self._hmi_fb00 = {}
 
