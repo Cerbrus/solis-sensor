@@ -191,10 +191,8 @@ class SolisConfigFlow(ConfigFlow, domain=DOMAIN):
                         await self.async_set_unique_id(plant_id)
                         if not api.inverters:
                             _LOGGER.warning(
-                                "No inverters found for plant %s. "
-                                "The integration will be set up, but no "
-                                "sensors will be available until an "
-                                "inverter is connected.",
+                                "No inverters found for plant %s. The integration will be set up, "
+                                "but no sensors will be available until an inverter is connected.",
                                 plant_id,
                             )
                         title = f"Station {api.plant_name}" if api.plant_name else f"Station {plant_id}"
