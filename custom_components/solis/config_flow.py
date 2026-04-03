@@ -201,19 +201,22 @@ class SolisConfigFlow(ConfigFlow, domain=DOMAIN):
                         return self.async_create_entry(title=title, data=self._data)
                     errors["base"] = "auth"
 
+        prev = user_input or {}
+        prev_control = prev.get("Control") or {}
         data_schema = {
-            vol.Required(CONF_USERNAME, default=None): cv.string,
-            vol.Required(CONF_KEY_ID, default=None): cv.string,
-            vol.Required(CONF_SECRET, default=None): cv.string,
-            vol.Required(CONF_PLANT_ID, default=None): cv.string,
-            vol.Required(CONF_REFRESH_OK, default=300): cv.positive_int,
-            vol.Required(CONF_REFRESH_NOK, default=60): cv.positive_int,
-            vol.Required(CONF_REFRESH_INVERTER_DISCOVERY, default=300): cv.positive_int,
+            vol.Required(CONF_USERNAME, default=prev.get(CONF_USERNAME)): cv.string,
+            vol.Required(CONF_KEY_ID, default=prev.get(CONF_KEY_ID)): cv.string,
+            vol.Required(CONF_SECRET, default=prev.get(CONF_SECRET)): cv.string,
+            vol.Required(CONF_PLANT_ID, default=prev.get(CONF_PLANT_ID)): cv.string,
+            vol.Required(CONF_REFRESH_OK, default=prev.get(CONF_REFRESH_OK, 300)): cv.positive_int,
+            vol.Required(CONF_REFRESH_NOK, default=prev.get(CONF_REFRESH_NOK, 60)): cv.positive_int,
+            vol.Required(CONF_REFRESH_INVERTER_DISCOVERY, default=prev.get(
+                CONF_REFRESH_INVERTER_DISCOVERY, 300)): cv.positive_int,
             vol.Required("Control"): data_entry_flow.section(
                 vol.Schema(
                     {
-                        vol.Required(CONF_CONTROL, default=False): bool,
-                        vol.Optional(CONF_PASSWORD): cv.string,
+                        vol.Required(CONF_CONTROL, default=prev_control.get(CONF_CONTROL, False)): bool,
+                        vol.Optional(CONF_PASSWORD, default=prev_control.get(CONF_PASSWORD)): cv.string,
                     }
                 ),
                 {"collapsed": False},
