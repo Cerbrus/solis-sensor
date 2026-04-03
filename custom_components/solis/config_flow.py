@@ -216,7 +216,7 @@ class SolisConfigFlow(ConfigFlow, domain=DOMAIN):
                 vol.Schema(
                     {
                         vol.Required(CONF_CONTROL, default=prev_control.get(CONF_CONTROL, False)): bool,
-                        vol.Optional(CONF_PASSWORD, default=prev_control.get(CONF_PASSWORD)): cv.string,
+                        vol.Optional(CONF_PASSWORD, default=prev_control.get(CONF_PASSWORD, "")): cv.string,
                     }
                 ),
                 {"collapsed": False},
