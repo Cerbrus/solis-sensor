@@ -21,6 +21,7 @@ from .const import (
     CONF_PASSWORD,
     CONF_PLANT_ID,
     CONF_PORTAL_DOMAIN,
+    CONF_REFRESH_INVERTER_DISCOVERY,
     CONF_REFRESH_NOK,
     CONF_REFRESH_OK,
     CONF_SECRET,
@@ -106,13 +107,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Initialize the Ginlong data service.
     refresh_ok = 300
     refresh_error = 60
+    refresh_inverter_discovery = 300
     try:
         # Fixme: https://github.com/hultenvp/solis-sensor/issues/496
         refresh_ok = config[CONF_REFRESH_OK]
         refresh_error = config[CONF_REFRESH_NOK]
+        refresh_inverter_discovery = config.get(CONF_REFRESH_INVERTER_DISCOVERY, 300)
     except KeyError:
         pass
-    service: InverterService = InverterService(portal_config, hass, refresh_ok, refresh_error)
+    service: InverterService = InverterService(
+        portal_config, hass, refresh_ok, refresh_error, refresh_inverter_discovery
+    )
     hass.data[DOMAIN][entry.entry_id] = service
 
     # Forward the setup to the sensor platform.
