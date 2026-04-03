@@ -359,6 +359,9 @@ class SoliscloudAPI(BaseAPI):
         
         if len(self._inverter_list) == 0:
             _LOGGER.warning("No inverters found")
+            station = await self._get_station_details(self.config.plant_id)
+            if station:
+                self._plant_name = station.get("data", {}).get("sno")
         else:
             _LOGGER.debug("Found inverters: %s", list(self._inverter_list.keys()))
             for inv in list(self._inverter_list):
